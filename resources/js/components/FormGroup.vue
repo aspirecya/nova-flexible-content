@@ -122,6 +122,23 @@ export default {
         }
     },
 
+    watch: {
+        index() {
+            if(!window.tinyMCE) {
+                return;
+            }
+            this.$nextTick(() => {
+                tinyMCE.editors
+                    .filter((editor) => editor.id.startsWith(this.group.key)) // Getting only the editors for the current group
+                    .forEach((editor) => {
+                        let settings = editor.settings;
+                        editor.remove();
+                        tinyMCE.init(settings);
+                    })
+            });
+        }
+    },
+
     methods: {
         /**
          * Move this group up
